@@ -4,10 +4,11 @@ import { CountryService } from '../../services/country.service';
 import { HotToastService } from '@ngxpert/hot-toast';
 import { Region } from '../../interfaces/region.interface';
 import { catchError, finalize, of, tap } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-by-region',
-  imports: [SearchTableComponents],
+  imports: [SearchTableComponents, CommonModule],
   templateUrl: './by-region.html',
   styleUrl: './by-region.css'
 })
@@ -15,6 +16,9 @@ export class ByRegion {
 
   private readonly http = inject(CountryService);
   private readonly toast = inject(HotToastService);
+
+  regionsRest: string[] = ['africa', 'americas', 'asia', 'europe', 'oceania'];
+  activeRegion = signal<string>('');
 
 
   term = signal<string>('');
@@ -45,6 +49,10 @@ export class ByRegion {
           this.loading.set(false);
         })
       ).subscribe();
+  }
+  searchByRegion(region: string){
+    this.activeRegion.set(region);
+    this.http.searchRegion(region).subscribe(res => this.regions.set(res));
 
   }
 

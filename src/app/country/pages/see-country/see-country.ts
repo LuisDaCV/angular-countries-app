@@ -33,7 +33,7 @@ export class SeeCountry implements OnInit {
       )
       .subscribe(country => {
         if(!country) return;
-        this.country = country[0];
+        this.country = country;
       })
 
   }

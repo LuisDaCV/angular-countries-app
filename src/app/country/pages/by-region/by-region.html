@@ -1,1 +1,12 @@
-<p>by-region works!</p>
+<div class="flex justify-center w-full text-center gap-5 mt-10">
+    @for (region of regionsRest; track $index) {
+    <span (click)="searchByRegion(region)" 
+        [ngClass]="{
+                    'bg-blue-500 hover:bg-blue-700' : region === activeRegion(),
+                    'bg-gray-500' : region !== activeRegion(),
+                }"
+        class=" px-4 py-1 font-semibold text-white rounded-lg hover:scale-105  transition-all duration-300 cursor-pointer">{{region}}</span>
+    }
+
+</div>
+<app-search-table [countries]="regions" [loading]="loading" (onSearch)="search($event)" title="Region" />

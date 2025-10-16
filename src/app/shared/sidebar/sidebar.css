@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+.link-opcions {
+    @apply block px-3 py-2 rounded-lg  hover:bg-blue-200 cursor-pointer hover:scale-105 transition duration-300 bg-gray-200
+}
+.link-active {
+    @apply !bg-blue-200 text-blue-800 font-semibold
+}

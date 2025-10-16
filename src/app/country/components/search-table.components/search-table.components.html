@@ -1,0 +1,68 @@
+<div class="flex flex-col w-full h-full px-15 items-center animate__animated animate__fadeIn animate__faster">
+    <div class="px-10 py-3.5 border-b  w-full">
+        <h2 class="text-3xl text-blue-600 font-semibold text-center">By {{title}}</h2>
+    </div>
+
+    <div class="relative flex flex-col items-center mt-6 w-full max-w-md mb-10">
+        <form (ngSubmit)="search()" autocomplete="off" class="flex gap-3 justify-center">
+            <input [(ngModel)]="term" placeholder="Search {{title}}..." type="text" name="term" (input)="keyPressed()"
+                class="border border-gray-300 rounded-lg px-4 py-2 w-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
+            <button type="submit"
+                class="bg-blue-600 text-white px-6 py-2  rounded-xl font-semibold hover:bg-blue-700 transition-all disabled:opacity-60"
+                [disabled]="loading()">{{loading() ? 'Searching...': 'Search'}}</button>
+        </form>
+        <ul
+            class="absolute top-full mt-1 w-100 bg-white mr-30 border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+            @for (sug of suggested; track $index) {
+
+            <li [routerLink]="['/country', sug.cca2]"
+                    class="px-4 py-2 cursor-pointer hover:bg-gray-100 transition-colors duration-200 hover:font-semibold hover:text-blue-600">
+                {{sug.name.common}}</li>
+            }
+        </ul>
+    </div>
+
+    @if (loading()) {
+    <div class="text-blue-600 font-bold text-5xl text-center mt-4 animate-pulse">Loading results...</div>
+    }
+    @if (!loading() && countries().length > 0) {
+
+    <div class="w-full rounded-lg overflow-hidden shadow-xl shadow-gray-400 overflow-y-auto mb-10 ">
+        <table class="min-w-full">
+            <thead class="bg-blue-600 text-white sticky top-0 z-10 ">
+                <tr>
+                    <th class="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wide">#</th>
+                    <th class="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wide">Flag</th>
+                    <th class="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wide">Name</th>
+                    <th class="py-3 px-4 text-left text-sm font-semibold uppercase tracking-wide">Population</th>
+                    <th class="py-3 px-4 text-center text-sm font-semibold uppercase tracking-wide">Action</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 bg-white ">
+                @for (country of countries(); track $index) {
+                <tr
+                    class="hover:bg-blue-200 transition-colors duration-200 animate__animated animate__fadeIn animate__slow ">
+
+                    <td class="py-3 px-4 text-gray-700 text-sm">{{$index + 1}}</td>
+                    <td class="py-3 px-4">
+                        <img src={{country.flags.png}} alt={{country.name.common}}
+                            class="w-8 h-5 rounded-sm shadow-sm border">
+                    </td>
+                    <td class="py-3 px-4 font-medium text-gray-800">{{title === "Capital" ? country.capital + ', ' :
+                        title === 'Region' ? country.region + ', ' : '' }} {{country.name.common}}</td>
+                    <td class="py-3 px-4 text-gray-600">{{country.population | number}}</td>
+                    <td class="py-3 px-4 text-center">
+                        <a [routerLink]="['/country', country.cca2]"
+                            class="text-blue-600 hover:text-blue-800 font-semibold text-sm transition-colors">
+                            See...
+                        </a>
+                    </td>
+                </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+    }
+</div>
